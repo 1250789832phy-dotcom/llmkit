@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.mypy_cache/
+.ruff_cache/
+pytest-of-*/
+pytest-cache-files-*/
+
+# pip 构建临时目录（TEMP 指向项目内时会落在这里）
+pip-build-env-*/
+pip-build-tracker-*/
+pip-install-*/
+pip-ephem-wheel-cache-*/
