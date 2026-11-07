@@ -1,12 +1,27 @@
+# Python
 __pycache__/
 *.py[cod]
+*$py.class
+
+# 虚拟环境
 .venv/
-.pytest_cache/
-*.egg-info/
+venv/
+env/
+
+# 打包与构建
 build/
 dist/
+*.egg-info/
+.eggs/
+
+# 测试缓存
+.pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.coverage
+htmlcov/
+
+# pytest 临时残渣（Windows 临时目录权限受保护时删不掉，至少别提交）
 pytest-of-*/
 pytest-cache-files-*/
 
@@ -15,3 +30,9 @@ pip-build-env-*/
 pip-build-tracker-*/
 pip-install-*/
 pip-ephem-wheel-cache-*/
+
+# 编辑器与系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
