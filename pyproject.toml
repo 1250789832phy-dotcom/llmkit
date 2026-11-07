@@ -26,5 +26,8 @@ llmkit = "cli:main"
 [tool.setuptools.packages.find]
 include = ["llmkit*"]
 
+[tool.setuptools]
+py-modules = ["cli"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
