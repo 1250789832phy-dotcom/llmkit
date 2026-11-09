@@ -11,7 +11,7 @@
 - **自动重试** - 指数退避重试机制，应对网络波动和限流
 - **流式支持** - 支持流式和非流式两种输出模式
 - **类型安全** - 完整的类型注解，IDE 友好
-- **零依赖** - 仅依赖标准库，轻量简洁
+- **轻量依赖** - HTTP 请求使用 `httpx`；离线 Mock 无需 API key
 
 ## 🚀 快速开始
 
@@ -22,9 +22,16 @@
 git clone https://github.com/1250789832phy-dotcom/llmkit.git
 cd llmkit
 
-# 安装（开发模式）
-pip install -e .
+# 安装库及当前代码需要的 HTTP 依赖
+python -m pip install -e . "httpx>=0.27"
+
+# 开发与测试（包含 pytest 和 httpx）
+python -m pip install -e ".[dev]"
 ```
+
+当前打包配置未声明运行时依赖，但 Provider 模块会在导入时加载 `httpx`，
+因此仅执行 `pip install -e .` 不足以正常使用库，使用 MockProvider 也需要安装 `httpx`。
+Python 版本要求为 3.11 或更高。
 
 ### 基础使用
 
