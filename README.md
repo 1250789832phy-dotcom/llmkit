@@ -57,7 +57,9 @@ print(f"Token 用量: {response.usage.total_tokens}")
 ### 离线测试（无需 API key）
 
 ```python
+from llmkit.client import LLMClient
 from llmkit.providers.mock import MockProvider
+from llmkit.types import Message
 
 # 使用 MockProvider 进行离线开发
 provider = MockProvider()
