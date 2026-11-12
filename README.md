@@ -168,6 +168,10 @@ response = client.complete(
 # 退避间隔: 0.5s, 1.0s, 2.0s
 ```
 
+`retries` 表示首次调用之后允许的重试次数。自动重试仅适用于
+`complete()`；`stream()` 直接返回 Provider 的流，不会自动重试，
+流式连接失败时请由业务层决定是否重新建立连接。
+
 ### 流式输出
 
 ```python
