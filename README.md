@@ -265,7 +265,7 @@ python -m pytest tests/
 # 运行特定测试
 python -m pytest tests/test_mock_provider.py -v
 
-# 查看覆盖率
+# 查看覆盖率（`.[dev]` 已包含 pytest-cov）
 python -m pytest --cov=llmkit tests/
 ```
 
