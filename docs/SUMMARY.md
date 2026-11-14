@@ -9,11 +9,11 @@
 ## 📊 项目统计
 
 ```
-总代码行数: ~1000 行
-核心模块:    6 个
-测试用例:    15+ 个
+总代码行数: ~980 行
+核心模块:    8 个 Python 文件
+测试用例:    6 个
 示例代码:    3 个完整演示
-测试覆盖率:  >90%
+测试覆盖率:  约 70%（本地 `pytest --cov=llmkit tests/`）
 ```
 
 ## 🏗️ 完整架构
@@ -94,11 +94,8 @@ llmkit/
 
 | 文件 | 测试数 | 覆盖内容 |
 |------|--------|----------|
-| `test_types.py` | 3 | Message/Response/Usage |
-| `test_errors.py` | 5 | 错误分类和属性 |
-| `test_mock_provider.py` | 6 | Mock 的各种模式 |
-| `test_client.py` | 4 | 重试、流式、错误处理 |
-| `test_openai_compat.py` | 3 | OpenAI 适配器 |
+| `test_mock_provider.py` | 3 | Mock 的各种模式 |
+| `test_client_retry.py` | 3 | 重试、流式、错误处理 |
 
 ### 示例代码（examples/）
 
@@ -243,7 +240,7 @@ def _generate_mock_id(self, messages):
 
 ## 💎 设计亮点
 
-### 1. 零依赖设计
+### 1. 轻量依赖设计
 
 ```python
 # 仅使用标准库
@@ -258,7 +255,8 @@ from urllib.error import URLError, HTTPError
 ```
 
 **优势：**
-- 无外部依赖，安装简单
+- 运行时通过 `httpx` 访问 OpenAI 兼容接口
+- 开发依赖集中在 `.[dev]`，安装和测试命令统一
 - 减少依赖冲突
 - 轻量级，易于理解
 
