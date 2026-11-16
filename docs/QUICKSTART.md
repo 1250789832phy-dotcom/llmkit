@@ -1,11 +1,18 @@
 ﻿# 🚀 LLMKit 5分钟快速上手
 
-## 第一步：验证安装
+## 第一步：安装并验证
+
+需要 Python 3.11 或更高版本。在克隆得到的 `llmkit` 仓库根目录、
+选定的 Python 环境中执行以下命令，不要切换到原始学习项目目录：
 
 ```bash
-cd "D:\agent 学习\projects\01-llm-client"
+python -m pip install -e . "httpx>=0.27"
 python -c "from llmkit import LLMClient; print('✅ 安装成功！')"
 ```
+
+Mock 不需要 API key，但当前 Provider 模块在导入时仍需要 `httpx`。
+若要运行测试和覆盖率检查，改用 `python -m pip install -e ".[dev]"`。
+后续命令也均在仓库根目录、同一个 Python 环境中执行。
 
 ## 第二步：运行第一个示例（无需 API key）
 
@@ -97,9 +104,26 @@ for chunk in client.stream(messages, model="mock"):
 
 ## 第五步：调用真实 API
 
-### 设置环境变量（Windows）
+### 设置环境变量
+
+在运行真实调用代码的同一个终端设置，不要提交真实密钥。
+
+Windows PowerShell：
+
+```powershell
+$env:LLM_API_KEY = "replace-with-your-api-key"
+```
+
+Windows cmd：
+
+```cmd
+set "LLM_API_KEY=replace-with-your-api-key"
+```
+
+Linux / macOS：
+
 ```bash
-set LLM_API_KEY=sk-your-api-key-here
+export LLM_API_KEY="replace-with-your-api-key"
 ```
 
 ### 调用 OpenAI
@@ -153,18 +177,17 @@ print(f"用了 {response.usage.total_tokens} 个 token")
 
 ## 下一步
 
-- 📖 阅读 [README.md](README.md) 了解完整功能
-- 💻 运行 [examples/03_real_world.py](examples/03_real_world.py) 查看实战场景
-- 🧪 运行 `pytest tests/ -v` 查看测试用例
+- 📖 阅读 [README.md](../README.md) 了解完整功能
+- 💻 运行 [examples/03_real_world.py](../examples/03_real_world.py) 查看实战场景
+- 🧪 安装 `.[dev]` 后运行 `python -m pytest tests/ -v` 查看测试用例
 - 📚 阅读 [SUMMARY.md](SUMMARY.md) 理解架构设计
 
 ## 问题排查
 
-**Q: ImportError: No module named 'llmkit'**
+**Q: ModuleNotFoundError: No module named 'llmkit' 或 'httpx'**
 ```bash
-# 在项目根目录运行
-cd "D:\agent 学习\projects\01-llm-client"
-pip install -e .
+# 在克隆的 llmkit 仓库根目录、运行代码的同一个 Python 环境中执行
+python -m pip install -e . "httpx>=0.27"
 ```
 
 **Q: Mock 输出总是一样的**
@@ -193,6 +216,6 @@ python examples/03_real_world.py
 **🎉 恭喜！你已经掌握了 LLMKit 的基本使用！**
 
 继续探索：
-- [完整文档](README.md)
+- [完整文档](../README.md)
 - [架构详解](SUMMARY.md)
 - [项目索引](INDEX.md)
