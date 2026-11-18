@@ -2,6 +2,10 @@
 
 本目录包含了 `llmkit` 的实际使用示例，从基础到实战应用。
 
+所有命令均在仓库根目录、已选定的 Python 环境中执行。先按
+[安装说明](../README.md#安装) 安装库和 `httpx`；离线 Mock 不需要 API key，
+但当前 Provider 模块在导入时仍需要 `httpx`。
+
 ## 📁 示例列表
 
 ### 1. MockProvider 基础演示 (`01_mock_provider.py`)
@@ -33,19 +37,40 @@ python examples/01_mock_provider.py
 - 自动重试 + 指数退避
 - 流式和非流式两种模式
 
-**配置：**
-```bash
-# Windows
-set LLM_API_KEY=sk-xxxxx
+**配置：** 在运行示例的同一个终端设置；以下仅为占位值，不要提交真实密钥。
 
-# Linux/Mac
-export LLM_API_KEY=sk-xxxxx
+Windows PowerShell：
+
+```powershell
+$env:LLM_API_KEY = "replace-with-your-api-key"
 ```
 
-**运行：**
-```bash
-python examples/02_openai_compat.py
+Windows cmd：
+
+```cmd
+set "LLM_API_KEY=replace-with-your-api-key"
 ```
+
+Linux / macOS：
+
+```bash
+export LLM_API_KEY="replace-with-your-api-key"
+```
+
+**运行前检查：** 不要配置真实密钥后直接运行整个
+`02_openai_compat.py`。脚本末尾会依次调用多个示例，包括默认端点与显式指定的
+DeepSeek 端点，且均默认读取同一个 `LLM_API_KEY`。
+这会把该密钥发送给不同服务；一个服务商的密钥也不代表有权访问另一个服务商。
+
+先核对所选示例的 `base_url`、模型及密钥归属；未显式指定地址时还会读取
+`LLM_BASE_URL`。以下只运行默认端点示例，不执行脚本末尾的其他示例：
+
+```bash
+python -c "import runpy; demo = runpy.run_path('examples/02_openai_compat.py'); demo['example_openai']()"
+```
+
+该调用会发送示例消息，可能产生费用。纯离线体验请运行示例 1 或示例 3；
+示例 3 使用 MockProvider，不能作为真实模型审查质量或费用的证明。
 
 **支持的服务商：**
 - OpenAI: `https://api.openai.com/v1`
@@ -238,8 +263,8 @@ except NetworkError:
 ## 📚 相关文档
 
 - [项目主 README](../README.md)
-- [API 文档](../docs/api.md)
-- [架构设计](../docs/architecture.md)
+- [Provider 接口源码](../llmkit/providers/base.py)
+- [架构设计](../docs/SUMMARY.md)
 
 ---
 
