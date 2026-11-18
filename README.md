@@ -211,6 +211,18 @@ print(f"输出 Token: {response.usage.completion_tokens}")
 print(f"总计: {response.usage.total_tokens}")
 ```
 
+### 用量与计费边界
+
+`response.usage` 不保证是精确的计费 Token 数：
+
+- MockProvider 始终按文本字符粗略估算，不进行真实模型调用或计费。
+- OpenAICompatProvider 对输入、输出分别使用上游返回的非零用量；
+  对于缺失或为 `0` 的字段，当前实现会回退到字符估算，因此上游报告的
+  `0` 不一定会原样保留。估算不使用模型 tokenizer，也不包含完整协议开销。
+- `total_tokens` 是上述输入、输出数值之和，不是独立读取的上游总计。
+  排查差异时可查看 `response.raw` 中的原始 `usage`；费用以服务商账单为准。
+- `client.stream()` 只产出文本片段，不返回 `ChatResponse` 或流式用量统计。
+
 ### 错误处理
 
 ```python
