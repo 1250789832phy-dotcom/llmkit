@@ -41,26 +41,31 @@ msg = Message(role="user", content="你好")
 ```
 
 ### 2. Provider - 服务提供者
+
+先使用离线 Provider；真实 Provider 的配置留到第五步。
+
 ```python
 from llmkit.providers.mock import MockProvider
 
 # 离线测试用 Mock
 provider = MockProvider()
-
-# 真实调用用 OpenAI 兼容
-from llmkit.providers.openai_compat import OpenAICompatProvider
-provider = OpenAICompatProvider()  # 需要 LLM_API_KEY
 ```
 
 ### 3. Client - 统一客户端
+
+下面是可独立运行的离线例子，不依赖前面代码块中的变量：
+
 ```python
 from llmkit.client import LLMClient
+from llmkit.providers.mock import MockProvider
+from llmkit.types import Message
 
 # 创建客户端
-client = LLMClient(provider)
+client = LLMClient(MockProvider())
+messages = [Message(role="user", content="你好")]
 
 # 发送请求
-response = client.complete(messages, model="gpt-3.5-turbo")
+response = client.complete(messages, model="mock")
 print(response.text)
 ```
 
@@ -127,8 +132,16 @@ export LLM_API_KEY="replace-with-your-api-key"
 ```
 
 ### 调用 OpenAI
+
+以下代码会发起真实请求，可能产生费用。先确认 `LLM_API_KEY` 属于所选服务，
+并检查当前终端的 `LLM_BASE_URL`：未显式传入 `base_url` 时，会优先采用
+该变量的非空值，未设置时才使用默认地址。切换服务商时应同时核对地址、模型和密钥，
+不要跨服务复用密钥。
+
 ```python
+from llmkit.client import LLMClient
 from llmkit.providers.openai_compat import OpenAICompatProvider
+from llmkit.types import Message
 
 provider = OpenAICompatProvider()
 client = LLMClient(provider)
@@ -192,7 +205,8 @@ python -m pip install -e . "httpx>=0.27"
 
 **Q: Mock 输出总是一样的**
 - 这是正常的！相同输入 → 相同输出（确定性）
-- 使用 `scripted=[]` 参数可以预设不同回复
+- 使用非空队列，例如 `scripted=["第一次回复", "第二次回复"]`，可按调用顺序返回预设文本。
+  空队列或队列耗尽后会回到默认的确定性回复，不会循环预设队列。
 
 **Q: 真实 API 调用失败**
 - 检查 LLM_API_KEY 是否设置
@@ -204,12 +218,14 @@ python -m pip install -e . "httpx>=0.27"
 # 示例 1: Mock 基础
 python examples/01_mock_provider.py
 
-# 示例 2: OpenAI 兼容
-python examples/02_openai_compat.py
-
 # 示例 3: 实战场景
 python examples/03_real_world.py
 ```
+
+示例 2 会访问真实端点。不要设置真实密钥后直接运行整个
+`examples/02_openai_compat.py`：它会依次执行多个示例，默认端点和显式指定的
+DeepSeek 端点会复用 `LLM_API_KEY`。先按
+[示例目录的安全运行说明](../examples/README.md) 核对配置并选择单个示例。
 
 ---
 
